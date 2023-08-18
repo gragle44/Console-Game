@@ -22,8 +22,8 @@ private:
 class Map {
 public:
     Map(unsigned int length, unsigned int height)
-        : m_Length(length), m_Height(height), m_Map(length* height, background), m_Player(0,0) {
-        SetCell(m_Player.GetX(), m_Player.GetY(), 'T');
+        : m_Length(length), m_Height(height), m_Map(length* height, m_Background), m_Player(0,0) {
+        SetCell(m_Player.GetX(), m_Player.GetY(), m_PlayerCharacter);
     }
 
     void PrintMap() const {
@@ -43,9 +43,9 @@ public:
 
     void MovePlayer(int deltaX, int deltaY) {
         if (ValidMove(deltaX, deltaY)) {
-            SetCell(m_Player.GetX(), m_Player.GetY(), background);
+            SetCell(m_Player.GetX(), m_Player.GetY(), m_Background);
             m_Player.Move(deltaX, deltaY);
-            SetCell(m_Player.GetX(), m_Player.GetY(), 'T');
+            SetCell(m_Player.GetX(), m_Player.GetY(), m_PlayerCharacter);
         }
     }
 
@@ -58,7 +58,8 @@ public:
     }
 
 private:
-    const char background = '-';
+    const char m_Background = '-';
+    const char m_PlayerCharacter = 'T';
     unsigned int m_Length;
     unsigned int m_Height;
     std::vector<char> m_Map;
