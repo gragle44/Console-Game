@@ -40,7 +40,7 @@ public:
             for (int x = 0; x < m_Length; ++x) {
                 std::cout << GetCell(x, y) << ' ';
             }
-            std::cout << '#' << std::endl;
+            std::cout << '#' << '\n';
         }
 
         PrintHorizontalBorder();
@@ -99,7 +99,7 @@ private:
         for (int i = 0; i < m_Length + 2; ++i) {
             std::cout << '#' << ' ';
         }
-        std::cout << std::endl;
+        std::cout << '\n';
     }
 };
 
@@ -130,7 +130,7 @@ void run() {
             deltaX = 1;
         }
         else {
-            std::cout << "Invalid input!" << std::endl;
+            std::cout << "Invalid input!" << '\n';
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             continue;
         }
