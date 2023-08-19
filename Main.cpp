@@ -14,6 +14,11 @@ public:
         m_Y += deltaY;
     }
 
+    void MoveTo(int X, int Y) {
+        m_X = X;
+        m_Y = Y;
+    }
+
 private:
     unsigned int m_X;
     unsigned int m_Y;
@@ -23,7 +28,7 @@ class Map {
 public:
     Map(unsigned int length, unsigned int height)
         : m_Length(length), m_Height(height), m_Map(length* height, m_Background), m_Player(0,0) {
-        SetCell(m_Player.GetX(), m_Player.GetY(), m_PlayerCharacter);
+        SetDefaultCells();
     }
 
     void PrintMap() const {
@@ -42,11 +47,24 @@ public:
     }
 
     void MovePlayer(int deltaX, int deltaY) {
-        if (ValidMove(deltaX, deltaY)) {
-            SetCell(m_Player.GetX(), m_Player.GetY(), m_Background);
-            m_Player.Move(deltaX, deltaY);
-            SetCell(m_Player.GetX(), m_Player.GetY(), m_PlayerCharacter);
+        if (!ValidMove(deltaX, deltaY))
+            return;
+
+        unsigned int playerX = m_Player.GetX();
+        unsigned int playerY = m_Player.GetY();
+        unsigned int newPlayerX = playerX + deltaX;
+        unsigned int newPlayerY = playerY + deltaY;
+
+        char targetCell = GetCell(newPlayerX, newPlayerY);
+        if (targetCell == m_Teleporter) {
+            m_Player.MoveTo(2, 2);
         }
+        else {
+            m_Player.Move(deltaX, deltaY);
+        }
+
+        SetCell(playerX, playerY, m_Background);
+        SetCell(m_Player.GetX(), m_Player.GetY(), m_PlayerCharacter);
     }
 
     char GetCell(unsigned int x, unsigned int y) const {
@@ -58,12 +76,18 @@ public:
     }
 
 private:
+    const char m_Teleporter = '0';
     const char m_Background = '-';
     const char m_PlayerCharacter = 'T';
     unsigned int m_Length;
     unsigned int m_Height;
     std::vector<char> m_Map;
     Player m_Player;
+
+    void SetDefaultCells() {
+        SetCell(m_Player.GetX(), m_Player.GetY(), m_PlayerCharacter);
+        SetCell(m_Length / 2, m_Height / 2, m_Teleporter);
+    }
 
     bool ValidMove(int deltaX, int deltaY) const {
         int newX = m_Player.GetX() + deltaX;
@@ -80,7 +104,7 @@ private:
 };
 
 void run() {
-    Map map(10, 10);
+    Map map(9, 9);
     map.PrintMap();
 
     char userInput;
